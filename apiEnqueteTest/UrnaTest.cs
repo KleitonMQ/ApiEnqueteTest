@@ -1,11 +1,14 @@
 using APIEnquete.src.Entities;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.Engine.ClientProtocol;
 using Xunit;
+using Xunit.Sdk;
 
 namespace apiEnqueteTest
 {
     public class UrnaTest
     {
+        public AsyncTestSyncContext TestExecutionContext { get; set; } 
         [Fact]
         public void PossivelAdicionarVoto()
         {
@@ -53,6 +56,24 @@ namespace apiEnqueteTest
             Assert.False(chamada);
         }
 
+        [Fact]
+        public void PossivelDesserializar()
+        {
+            string caminho = Path.Combine(Directory.GetCurrentDirectory(), "Enquetes", "UrnaTeste");
+            Urna urna = Urna.DesserializarXml<Urna>(caminho);
+            
 
+            
+            Assert.Equal(urna.NomeEnquete, "UrnaTeste");
+        }
+        [Fact]
+        public void ImpossivelDesserializarPorNomeErrado()
+        {
+            string caminho = Path.Combine(Directory.GetCurrentDirectory(), "Enquetes", "UrnaTeste2");
+            Urna urna = Urna.DesserializarXml<Urna>(caminho);
+
+
+            Assert.Null(urna);
+        }
     }
 }
